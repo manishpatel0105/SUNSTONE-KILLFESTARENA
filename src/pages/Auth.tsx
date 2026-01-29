@@ -21,15 +21,24 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   
-  const { user, isAdmin, signIn, signUp } = useAuth();
+  const { user, isAdmin, signIn, signUp, signOut, isLoading: isAuthLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    if (user && isAdmin) {
-      navigate('/admin');
+    if (!isAuthLoading && user) {
+      if (isAdmin) {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     }
-  }, [user, isAdmin, navigate]);
+  }, [user, isAdmin, isAuthLoading, navigate]);
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   const validateForm = () => {
     try {

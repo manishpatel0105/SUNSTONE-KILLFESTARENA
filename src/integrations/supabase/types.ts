@@ -92,6 +92,243 @@ export type Database = {
         }
         Relationships: []
       }
+      teams: {
+        Row: {
+          id: string
+          name: string
+          game: string
+          mode: string
+          created_by: string | null
+          is_active: boolean
+          notes: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          game: string
+          mode: string
+          created_by?: string | null
+          is_active?: boolean
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          game?: string
+          mode?: string
+          created_by?: string | null
+          is_active?: boolean
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          id: string
+          team_id: string
+          name: string
+          game_username: string
+          game_id: string
+          is_leader: boolean
+          email: string | null
+          phone: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          team_id: string
+          name: string
+          game_username: string
+          game_id: string
+          is_leader?: boolean
+          email?: string | null
+          phone?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          team_id?: string
+          name?: string
+          game_username?: string
+          game_id?: string
+          is_leader?: boolean
+          email?: string | null
+          phone?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      tournaments: {
+        Row: {
+          id: string
+          name: string
+          game: string
+          mode: string
+          description: string | null
+          total_rounds: number
+          current_round: number
+          status: "draft" | "registration" | "in_progress" | "completed" | "cancelled"
+          start_date: string | null
+          end_date: string | null
+          created_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          game: string
+          mode: string
+          description?: string | null
+          total_rounds?: number
+          current_round?: number
+          status?: "draft" | "registration" | "in_progress" | "completed" | "cancelled"
+          start_date?: string | null
+          end_date?: string | null
+          created_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          game?: string
+          mode?: string
+          description?: string | null
+          total_rounds?: number
+          current_round?: number
+          status?: "draft" | "registration" | "in_progress" | "completed" | "cancelled"
+          start_date?: string | null
+          end_date?: string | null
+          created_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tournament_rounds: {
+        Row: {
+          id: string
+          tournament_id: string
+          round_number: number
+          name: string
+          description: string | null
+          scheduled_date: string | null
+          status: "pending" | "in_progress" | "completed"
+          max_teams: number | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          tournament_id: string
+          round_number: number
+          name: string
+          description?: string | null
+          scheduled_date?: string | null
+          status?: "pending" | "in_progress" | "completed"
+          max_teams?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          tournament_id?: string
+          round_number?: number
+          name?: string
+          description?: string | null
+          scheduled_date?: string | null
+          status?: "pending" | "in_progress" | "completed"
+          max_teams?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tournament_rounds_tournament_id_fkey"
+            columns: ["tournament_id"]
+            referencedRelation: "tournaments"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      round_qualifications: {
+        Row: {
+          id: string
+          tournament_id: string
+          round_id: string
+          team_id: string
+          status: "qualified" | "eliminated" | "winner"
+          points: number | null
+          rank: number | null
+          notes: string | null
+          qualified_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          tournament_id: string
+          round_id: string
+          team_id: string
+          status?: "qualified" | "eliminated" | "winner"
+          points?: number | null
+          rank?: number | null
+          notes?: string | null
+          qualified_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          tournament_id?: string
+          round_id?: string
+          team_id?: string
+          status?: "qualified" | "eliminated" | "winner"
+          points?: number | null
+          rank?: number | null
+          notes?: string | null
+          qualified_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "round_qualifications_tournament_id_fkey"
+            columns: ["tournament_id"]
+            referencedRelation: "tournaments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "round_qualifications_round_id_fkey"
+            columns: ["round_id"]
+            referencedRelation: "tournament_rounds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "round_qualifications_team_id_fkey"
+            columns: ["team_id"]
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string

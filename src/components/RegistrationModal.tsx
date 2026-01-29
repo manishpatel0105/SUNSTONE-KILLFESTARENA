@@ -20,7 +20,7 @@ const registrationSchema = z.object({
   fullName: z.string().trim().min(2, 'Name must be at least 2 characters').max(100),
   college: z.string().trim().min(2, 'College name is required').max(200),
   studentId: z.string().trim().min(2, 'Student ID is required').max(50),
-  phone: z.string().regex(/^[6-9]\d{9}$/, 'Enter a valid 10-digit phone number'),
+  phone: z.string().regex(/^(?:0|91|\+91)?[6-9]\d{9}$/, 'Enter a valid phone number'),
   email: z.string().trim().email('Enter a valid email address').max(255),
   gameUsername: z.string().trim().min(2, 'Game username is required').max(50),
   gameId: z.string().trim().min(2, 'Game ID is required').max(50),
@@ -151,7 +151,9 @@ const RegistrationModal = ({ isOpen, onClose, selectedGame, onSuccess }: Registr
     return `SKF-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    
     if (selectedGame?.isSquad && step === 2) {
       if (validateStep2()) {
         setStep(3);
@@ -437,7 +439,7 @@ const RegistrationModal = ({ isOpen, onClose, selectedGame, onSuccess }: Registr
                   </div>
                 )}
 
-                <Button variant="neon" size="lg" className="w-full mt-4" onClick={handleSubmit} disabled={isSubmitting}>
+                <Button type="button" variant="neon" size="lg" className="w-full mt-4" onClick={handleSubmit} disabled={isSubmitting}>
                   {selectedGame.isSquad ? (
                     'Configure Squad'
                   ) : isSubmitting ? (
@@ -533,7 +535,7 @@ const RegistrationModal = ({ isOpen, onClose, selectedGame, onSuccess }: Registr
                   </p>
                 </div>
 
-                <Button variant="neon" size="lg" className="w-full" onClick={handleSubmit} disabled={isSubmitting}>
+                <Button type="button" variant="neon" size="lg" className="w-full" onClick={handleSubmit} disabled={isSubmitting}>
                   {isSubmitting ? (
                     <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Registering Quad...</>
                   ) : (

@@ -13,5 +13,16 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     storage: localStorage,
     persistSession: true,
     autoRefreshToken: true,
+  },
+  global: {
+    // Add custom fetch with signal logic if needed, but for now just prevent default abort
+    fetch: (url, options) => {
+      // Don't auto-abort queries on component update
+      const newOptions = { ...options };
+      if (newOptions.signal) {
+        delete newOptions.signal;
+      }
+      return fetch(url, newOptions);
+    }
   }
 });

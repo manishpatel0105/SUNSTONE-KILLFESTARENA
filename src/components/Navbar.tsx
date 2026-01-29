@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Gamepad2, Menu, X } from 'lucide-react';
+import { Gamepad2, Menu, X, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
 
 interface NavbarProps {
   onRegisterClick: () => void;
@@ -10,6 +12,8 @@ interface NavbarProps {
 const Navbar = ({ onRegisterClick }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, isAdmin } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,6 +62,17 @@ const Navbar = ({ onRegisterClick }: NavbarProps) => {
                 {link.label}
               </a>
             ))}
+            
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate(user ? (isAdmin ? '/admin' : '/dashboard') : '/auth')}
+              className="text-muted-foreground hover:text-primary font-rajdhani uppercase tracking-wider"
+            >
+              <User className="w-4 h-4 mr-2" />
+              {user ? 'Dashboard' : 'Login'}
+            </Button>
+
             <Button variant="neon" size="sm" onClick={onRegisterClick}>
               Register
             </Button>
@@ -96,6 +111,18 @@ const Navbar = ({ onRegisterClick }: NavbarProps) => {
                 {link.label}
               </a>
             ))}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => {
+                navigate(user ? (isAdmin ? '/admin' : '/dashboard') : '/auth');
+                setIsMobileMenuOpen(false);
+              }}
+              className="justify-start text-muted-foreground hover:text-primary font-rajdhani uppercase tracking-wider px-0"
+            >
+              <User className="w-4 h-4 mr-2" />
+              {user ? 'Dashboard' : 'Login'}
+            </Button>
             <Button variant="neon" size="sm" onClick={() => { onRegisterClick(); setIsMobileMenuOpen(false); }}>
               Register Now
             </Button>
